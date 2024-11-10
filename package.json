@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/ZinK0/Professional-README-Generator/issues"
   },
-  "homepage": "https://github.com/ZinK0/Professional-README-Generator#readme"
+  "homepage": "https://github.com/ZinK0/Professional-README-Generator#readme",
+  "dependencies": {
+    "inquirer": "^12.0.1"
+  }
 }
