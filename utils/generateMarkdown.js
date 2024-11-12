@@ -49,8 +49,11 @@ function generateMarkdown(data, licenses, writeToFile, octokit) {
   // return `# ${data.title}
   console.log("===>", data);
 
-  renderLicenseSection(licenses, data.license, writeToFile, octokit);
-
+  if (data.license) {
+    renderLicenseSection(licenses, data.license, writeToFile, octokit);
+  } else {
+    return " ";
+  }
   // `;
 }
 
