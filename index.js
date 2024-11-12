@@ -6,6 +6,9 @@
 import inquirer from "inquirer";
 // import { input } from "@inquirer/prompts";
 
+// GET the commonly used license from the Github
+
+
 // TODO: Create an array of questions for user input
 const questions = [
   {
