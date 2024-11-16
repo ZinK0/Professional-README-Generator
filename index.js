@@ -1,10 +1,20 @@
 // TODO: Include packages needed for this application
-
-// const { type } = require("os");
-// const fs = require("fs");
-// const inquirer = import("inquirer");
+import fs from "fs";
 import inquirer from "inquirer";
-// import { input } from "@inquirer/prompts";
+import { Octokit } from "@octokit/core";
+import genMD from "./utils/generateMarkdown.js";
+
+// GET the commonly used license from the Github
+const octokit = new Octokit();
+
+let licenses = await octokit.request("GET /licenses", {
+  headers: {
+    "X-GitHub-Api-Version": "2022-11-28",
+  },
+});
+
+// console.log(licenses.data);
+let licenseNames = licenses.data.map((license) => license.name);
 
 // TODO: Create an array of questions for user input
 const questions = [
@@ -58,7 +68,7 @@ const questions = [
     type: "checkbox",
     name: "license",
     message: "Which opensource license do you want to add ?",
-    choices: ["MIT", "GNU GPL v3.0", "none"],
+    choices: [...licenseNames, "none"],
   },
   {
     type: "input",
@@ -97,7 +107,13 @@ const questions = [
 ];
 
 // TODO: Create a function to write README file
-function writeToFile(fileName, data) {}
+function writeToFile(fileName, data) {
+  fs.writeFile(fileName, data, (err) => {
+    if (err) {
+      return err;
+    }
+  });
+}
 
 // TODO: Create a function to initialize app
 function init(questions) {
@@ -106,8 +122,8 @@ function init(questions) {
       /* Pass your questions in here */
       ...questions,
     ])
-    .then((answers) => {
-      console.log(answers);
+    .then((data) => {
+      return genMD(data, licenses, writeToFile, octokit);
     });
 }
 

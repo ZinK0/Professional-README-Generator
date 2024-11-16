@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ZinK0/Professional-README-Generator#readme",
   "dependencies": {
+    "@octokit/core": "^6.1.2",
     "inquirer": "^12.0.1"
   }
 }
