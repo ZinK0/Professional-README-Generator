@@ -11,6 +11,7 @@ function renderLicenseBadge(license) {}
 // TODO: Create a function that returns the license section of README
 // If there is no license, return an empty string
 async function renderLicenseSection(
+  data,
   licenses,
   userLicense,
   writeToFile,
@@ -35,9 +36,12 @@ async function renderLicenseSection(
     }
   );
 
-  console.log(licenseDetail.data.body);
+  let currentYear = new Date().getFullYear();
+  let licenseText = licenseDetail.data.body
+    .replace("[year]", currentYear)
+    .replace("[fullname]", data.username);
 
-  writeToFile("./LICENSE.txt", licenseDetail.data.body, (err) => {
+  writeToFile("./LICENSE.txt", licenseText, (err) => {
     if (err) {
       return err;
     }
@@ -49,8 +53,8 @@ function generateMarkdown(data, licenses, writeToFile, octokit) {
   // return `# ${data.title}
   console.log("===>", data);
 
-  if (data.license) {
-    renderLicenseSection(licenses, data.license, writeToFile, octokit);
+  if (data.license != "none") {
+    renderLicenseSection(data, licenses, data.license, writeToFile, octokit);
   } else {
     return " ";
   }

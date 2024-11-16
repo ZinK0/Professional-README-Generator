@@ -68,7 +68,7 @@ const questions = [
     type: "checkbox",
     name: "license",
     message: "Which opensource license do you want to add ?",
-    choices: licenseNames,
+    choices: [...licenseNames, "none"],
   },
   {
     type: "input",
