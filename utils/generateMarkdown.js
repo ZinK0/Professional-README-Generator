@@ -37,9 +37,13 @@ async function renderLicenseSection(
   );
 
   let currentYear = new Date().getFullYear();
-  let licenseText = licenseDetail.data.body
-    .replace("[year]", currentYear)
-    .replace("[fullname]", data.username);
+  let licenseText = licenseDetail.data.body;
+
+  if (userLicenseData.key == "mit") {
+    let licenseText = licenseDetail.data.body
+      .replace("[year]", currentYear)
+      .replace("[fullname]", data.username);
+  }
 
   writeToFile("./LICENSE.txt", licenseText, (err) => {
     if (err) {
