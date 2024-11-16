@@ -17,8 +17,8 @@ async function renderLicenseSection(
   writeToFile,
   octokit
 ) {
-  console.log(licenses);
-  console.log(userLicense);
+  // console.log(licenses);
+  // console.log(userLicense);
 
   let userLicenseData = licenses.data.find(
     (license) => license.name === userLicense[0]

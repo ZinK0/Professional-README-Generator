@@ -87,6 +87,7 @@ const questions = [
     type: "input",
     name: "imageURL",
     message: "Enter the image URL (optional, press ENTER to skip):",
+    default: false,
   },
   {
     type: "confirm",
@@ -115,6 +116,16 @@ function writeToFile(fileName, data) {
   });
 }
 
+// Project image section
+// Copy image file to current directory with the url given
+function copyImage(source, dest) {
+  fs.copyFile(source, `./src/${dest}.png`, (err) => {
+    if (err) {
+      return err;
+    }
+  });
+}
+
 // TODO: Create a function to initialize app
 function init(questions) {
   inquirer
@@ -123,6 +134,14 @@ function init(questions) {
       ...questions,
     ])
     .then((data) => {
+      // remove the string quote from the imageURL
+      let imageURL = data.imageURL.trim();
+      if (imageURL.startsWith("'") && imageURL.endsWith("'")) {
+        imageURL = imageURL.slice(1, -1);
+      }
+
+      copyImage(imageURL, data.project_name);
+
       return genMD(data, licenses, writeToFile, octokit);
     });
 }
