@@ -59,12 +59,6 @@ const questions = [
     },
   },
   {
-    type: "comfirm",
-    name: "badges",
-    message: "Do you want to add predefined badges ?",
-    default: true,
-  },
-  {
     type: "checkbox",
     name: "license",
     message: "Which opensource license do you want to add ?",
@@ -86,7 +80,7 @@ const questions = [
   {
     type: "input",
     name: "imageURL",
-    message: "Enter the image URL (optional, press ENTER to skip):",
+    message: "Drag and drop of your project image.",
   },
   {
     type: "confirm",
@@ -99,16 +93,21 @@ const questions = [
     name: "contributing",
     message: "Provide contribution guidelines : ",
   },
-  {
-    type: "input",
-    name: "test",
-    message: "Enter test filename : ",
-  },
 ];
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
   fs.writeFile(fileName, data, (err) => {
+    if (err) {
+      return err;
+    }
+  });
+}
+
+// Project image section
+// Copy image file to current directory with the url given
+function copyImage(source, dest) {
+  fs.copyFile(source, `./src/${dest}.png`, (err) => {
     if (err) {
       return err;
     }
@@ -123,7 +122,22 @@ function init(questions) {
       ...questions,
     ])
     .then((data) => {
+      // remove the string quote from the imageURL
+      let imageURL = data.imageURL.trim();
+      if (imageURL.startsWith("'") && imageURL.endsWith("'")) {
+        imageURL = imageURL.slice(1, -1);
+      }
+
+      copyImage(imageURL, data.project_name);
+
       return genMD(data, licenses, writeToFile, octokit);
+    })
+    .then((data) => {
+      writeToFile("README.md", data, (error) => {
+        if (error) {
+          return error;
+        }
+      });
     });
 }
 
